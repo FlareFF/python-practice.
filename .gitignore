@@ -1,0 +1,10 @@
+Plaintext
+
+# VS Code settings
+.vscode/
+
+# Python cache
+__pycache__/
+
+# Secrets
+.env
