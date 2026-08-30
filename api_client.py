@@ -1,24 +1,24 @@
-import urllib.request
-import json
+import requests
 
-city = input("Enter the city: ")
-geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
+while True:
+    city = input("Enter the city: ")
+    if city == "exit":
+        print("bye")
+        break
+    geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
+    try:
+        geo_dict = requests.get(geo_url).json()
 
-geo_response = urllib.request.urlopen(geo_url)
+        latitude = geo_dict["results"][0]["latitude"]
 
-data_geo_url = geo_response.read()
+        longitude = geo_dict["results"][0]["longitude"]
 
-geo_dict = json.loads(data_geo_url)
+        weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true"
 
-latitude = geo_dict["results"][0]["latitude"]
-longitude = geo_dict["results"][0]["longitude"]
+        weather_dict = requests.get(weather_url).json()
 
-url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true"
+        current_temp = weather_dict["current_weather"]["temperature"]
 
-response = urllib.request.urlopen(url)
-
-data = response.read()
-weather_dict = json.loads(data)
-
-current_temp = weather_dict["current_weather"]["temperature"]
-print(f"Current temperature: {current_temp} °C")
+        print(f"Current temperature in {city}: {current_temp} °C")
+    except (KeyError, IndexError):
+        print("City not found, try again")
