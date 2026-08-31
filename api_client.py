@@ -15,14 +15,18 @@ def get_weather(city):
         weather_dict = requests.get(weather_url).json()
 
         current_temp = weather_dict["current_weather"]["temperature"]
+        wind_speed = weather_dict["current_weather"]["windspeed"]
 
-        print(f"Current temperature in {city}: {current_temp} °C")
+        print(
+            f"Current temperature in {city}: {current_temp} °C,Wind: {wind_speed} km/h"
+        )
     except (KeyError, IndexError):
         print("City not found, try again")
 
-    while True:
-        city = input("Enter the city: ")
-        if city == "exit":
-            print("bye")
-            break
-        get_weather(city)
+
+while True:
+    city = input("Enter the city: ")
+    if city.lower() == "exit":
+        print("bye")
+        break
+    get_weather(city)
