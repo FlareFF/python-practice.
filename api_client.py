@@ -1,10 +1,7 @@
 import requests
 
-while True:
-    city = input("Enter the city: ")
-    if city == "exit":
-        print("bye")
-        break
+
+def get_weather(city):
     geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
     try:
         geo_dict = requests.get(geo_url).json()
@@ -22,3 +19,10 @@ while True:
         print(f"Current temperature in {city}: {current_temp} °C")
     except (KeyError, IndexError):
         print("City not found, try again")
+
+    while True:
+        city = input("Enter the city: ")
+        if city == "exit":
+            print("bye")
+            break
+        get_weather(city)
